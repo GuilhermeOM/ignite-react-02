@@ -5,6 +5,7 @@ import { Button } from "./Button";
 interface SideBarProps {
   selectedGenreId: number
   setSelectedGenreId: React.Dispatch<SetStateAction<number>>
+  setSelectedGenre: React.Dispatch<SetStateAction<GenreResponseProps>>
 }
 
 export interface GenreResponseProps {
@@ -13,7 +14,7 @@ export interface GenreResponseProps {
   title: string;
 }
 
-export function SideBar({ selectedGenreId, setSelectedGenreId }: SideBarProps) {
+export function SideBar({ selectedGenreId, setSelectedGenreId, setSelectedGenre }: SideBarProps) {
   const [genres, setGenres] = useState<GenreResponseProps[]>([]);
 
   useEffect(() => {
@@ -21,6 +22,12 @@ export function SideBar({ selectedGenreId, setSelectedGenreId }: SideBarProps) {
       setGenres(response.data);
     });
   }, []);
+
+  useEffect(() => {
+    api.get<GenreResponseProps>(`genres/${selectedGenreId}`).then(response => {
+      setSelectedGenre(response.data);
+    });
+  }, [selectedGenreId])
 
   function handleClickButton(id: number) {
     setSelectedGenreId(id);

@@ -5,6 +5,7 @@ import { GenreResponseProps } from "../components/SideBar";
 
 interface ContentProps {
   selectedGenreId: number;
+  selectedGenre: GenreResponseProps;
 }
 
 interface MovieProps {
@@ -18,18 +19,13 @@ interface MovieProps {
   Runtime: string;
 }
 
-export function Content({ selectedGenreId }: ContentProps) {
+export function Content({ selectedGenreId, selectedGenre }: ContentProps) {
   const [movies, setMovies] = useState<MovieProps[]>([]);
-  const [selectedGenre, setSelectedGenre] = useState<GenreResponseProps>({} as GenreResponseProps);
 
   useEffect(() => {
     api.get<MovieProps[]>(`movies/?Genre_id=${selectedGenreId}`).then(response => {
       setMovies(response.data);
     });
-
-    api.get<GenreResponseProps>(`genres/${selectedGenreId}`).then(response => {
-      setSelectedGenre(response.data);
-    })
   }, [selectedGenreId]);
 
   return (
